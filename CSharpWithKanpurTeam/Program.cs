@@ -1,118 +1,59 @@
 ﻿using System;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Calculation
 {
-    enum UserInput
+    class Employee
     {
-        Add = 1, Substract, Multiplication, Division
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int Age { get; set; }
     }
-    class Program
+
+    class Company
     {
-        public static int Addition(int a, int b)
-        {
-            return a + b;
-        }
-        public static int Subtraction(int a, int b)
-        {
-            return a - b;
-        }
-        public static int Multiplication(int a, int b)
-        {
-            return a * b;
-        }
-        public static int Division(int a, int b)
-        {
-            int result = 0;
-            try
-            {
-                result = a / b;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+        List<Employee> employeesList;
 
-            return result;
+        public Company()
+        {
+            employeesList = new List<Employee>
+            {
+                new Employee(){Id=1,Name="Anubhav",Age=23 },
+                new Employee(){Id=2,Name="Ankit",Age=24 }
+            };
         }
 
-        public static void Main(string[] args)
+        //1 Anubhav 2 Ankit
+        public string this[int id] 
         {
-            UserInput userChoice = 0;
-            int firstNumber = 0, secondNumber = 0, counter = 0, userInput = 0;
-            bool IsFirstValid = false, IsSecondValid = false, IsUserInputValid = false;
-        FreshStart:
-            Console.WriteLine("what do you want to perform");
-            Console.WriteLine("Enter 1 for add ,2 for sub, 3 for multiply and 4 for div");
-
-            IsUserInputValid = int.TryParse(Console.ReadLine(),out userInput);
-            userChoice = (UserInput)userInput;
-        GetNumberAgain:
-            if (IsUserInputValid == false)
+            get 
             {
-                if (counter < 3)
-                {
-                    counter++;
-                    Console.WriteLine("You have entered wrong choice.Please try again");
-                    goto FreshStart;
-                }
-                else
-                {
-                    Console.WriteLine("You have exceed limit. Try after some time");
-                    return;
-                    
-                }                                       
+                // Select name from tblName where id=2
+                return employeesList.Where(e => e.Id == id).FirstOrDefault().Name;
             }
-            else 
+            set
             {
-                Console.WriteLine("please enter the first number");
-                IsFirstValid = int.TryParse(Console.ReadLine(), out firstNumber);
-                Console.WriteLine("please enter the second number");
-                IsSecondValid = int.TryParse(Console.ReadLine(), out secondNumber);
+                employeesList.Where(e => e.Id == id).FirstOrDefault().Name = value;
             }
-           
-            if (IsFirstValid && IsSecondValid && IsUserInputValid)
-            {
-                switch (userChoice)
-                {
-                    case UserInput.Add:
-                        Console.WriteLine("The Add result is:" + Addition(firstNumber, secondNumber));
-                        break;
-
-                    case UserInput.Substract:
-                        Console.WriteLine("The Substract result is:" + Subtraction(firstNumber, secondNumber));
-                        break;
-
-                    case UserInput.Multiplication:
-                        Console.WriteLine("The Multiplication result is:" + Multiplication(firstNumber, secondNumber));
-                        break;
-
-                    case UserInput.Division:
-                        Console.WriteLine("The Division result is:" + Division(firstNumber, secondNumber));
-                        break;
-
-                    default:
-                        Console.WriteLine("Wrong selection");
-                       
-                        break;
-                }
-            }
-            else
-            {
-                if (counter < 3)
-                {
-                    if(!IsFirstValid)
-                        Console.WriteLine("You have not entered the correct value in first number");
-                    else if(!IsSecondValid)
-                        Console.WriteLine("You have not entered the correct value in second number");
-                    goto GetNumberAgain;
-                }
-                Console.WriteLine("You have not entered the correct value in first numbe ror second number");
-            }
+        }
+        static void Main()
+        {
+            Company obj = new Company();
+            Console.WriteLine("Before overwriting the value result are:");
+            Console.WriteLine(obj[1]); //Anubhav
+            Console.WriteLine(obj[2]); //Ankit
+            
+            obj[1] = "Nitin";
+            obj[2] = "Suraj";
+            Console.WriteLine("After overwriting the value result are:");
+            Console.WriteLine(obj[1]);
+            Console.WriteLine(obj[2]);
 
 
             Console.ReadKey();
         }
     }
-
 }
