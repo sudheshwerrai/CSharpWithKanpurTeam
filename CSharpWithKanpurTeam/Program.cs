@@ -1,56 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 
-namespace Calculation
+namespace IndexerProperty
 {
-    class Employee
+    class Student
     {
-        public int Id { get; set; }
+        public int StudentID { get; set; }
         public string Name { get; set; }
-        public int Age { get; set; }
+        public int RolloNo { get; set; }
     }
 
-    class Company
+    //StudentId=1,Name="Aakash"
+    class School
     {
-        List<Employee> employeesList;
-
-        public Company()
+        List<Student> studentList;
+        public School()
         {
-            employeesList = new List<Employee>
+            studentList = new List<Student>()
             {
-                new Employee(){Id=1,Name="Anubhav",Age=23 },
-                new Employee(){Id=2,Name="Ankit",Age=24 }
+                new Student(){StudentID=1,Name="Aakash",RolloNo=101 },
+                new Student(){StudentID=2,Name="Sudhanshu",RolloNo=102 },
+                new Student(){StudentID=3,Name="Bhavy",RolloNo=103 }
             };
         }
 
-        //1 Anubhav 2 Ankit
-        public string this[int id] 
+        //StudentId=1,Name="Aakash"
+        public string this[int studentId]
         {
-            get 
+            get
             {
-                // Select name from tblName where id=2
-                return employeesList.Where(e => e.Id == id).FirstOrDefault().Name;
+                return studentList.Where(sl => sl.StudentID == studentId).FirstOrDefault().Name;
             }
             set
             {
-                employeesList.Where(e => e.Id == id).FirstOrDefault().Name = value;
+                studentList.Where(pl => pl.StudentID == studentId).FirstOrDefault().Name = value;
             }
         }
+
         static void Main()
         {
-            Company obj = new Company();
-            Console.WriteLine("Before overwriting the value result are:");
-            Console.WriteLine(obj[1]); //Anubhav
-            Console.WriteLine(obj[2]); //Ankit
-            
-            obj[1] = "Nitin";
-            obj[2] = "Suraj";
-            Console.WriteLine("After overwriting the value result are:");
+            School obj = new School();
             Console.WriteLine(obj[1]);
             Console.WriteLine(obj[2]);
+            Console.WriteLine(obj[3]);
+
+            obj[1] = "Abhishek";
+            Console.WriteLine(obj[1]);
+            Console.WriteLine(obj[2]);
+            Console.WriteLine(obj[3]);
 
 
             Console.ReadKey();
