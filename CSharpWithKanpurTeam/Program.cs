@@ -4,52 +4,58 @@ using System.Linq;
 
 namespace IndexerProperty
 {
-    class Student
+    class StringDataStore
     {
-        public int StudentID { get; set; }
-        public string Name { get; set; }
-        public int RolloNo { get; set; }
-    }
-
-    //StudentId=1,Name="Aakash"
-    class School
-    {
-        List<Student> studentList;
-        public School()
-        {
-            studentList = new List<Student>()
-            {
-                new Student(){StudentID=1,Name="Aakash",RolloNo=101 },
-                new Student(){StudentID=2,Name="Sudhanshu",RolloNo=102 },
-                new Student(){StudentID=3,Name="Bhavy",RolloNo=103 }
-            };
-        }
-
-        //StudentId=1,Name="Aakash"
-        public string this[int studentId]
+        private string[] strArr = new string[10]; // internal data storage       
+        public string this[int index]
         {
             get
             {
-                return studentList.Where(sl => sl.StudentID == studentId).FirstOrDefault().Name;
+                if (index < 0 && index >= strArr.Length)
+                    throw new IndexOutOfRangeException("Cannot store more than 10 objects");
+
+                return strArr[index];
             }
+
             set
             {
-                studentList.Where(pl => pl.StudentID == studentId).FirstOrDefault().Name = value;
+                if (index < 0 && index >= strArr.Length)
+                    throw new IndexOutOfRangeException("Cannot store more than 10 objects");
+
+                strArr[index] = value;
             }
         }
 
-        static void Main()
+        public string this[string name]
         {
-            School obj = new School();
-            Console.WriteLine(obj[1]);
-            Console.WriteLine(obj[2]);
-            Console.WriteLine(obj[3]);
+            get
+            {
+                foreach (string str in strArr)
+                {
+                    if (str.ToLower() == name.ToLower())
+                        return str;
+                }
 
-            obj[1] = "Abhishek";
-            Console.WriteLine(obj[1]);
-            Console.WriteLine(obj[2]);
-            Console.WriteLine(obj[3]);
+                return null;
+            }
+        }
+    }
 
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            StringDataStore strStore = new StringDataStore();
+
+            strStore[0] = "One";            
+            strStore[1] = "Two";
+            strStore[2] = "Three";
+            strStore[3] = "Four";
+
+            Console.WriteLine(strStore["one"]);            
+            Console.WriteLine(strStore["two"]);
+            Console.WriteLine(strStore["Three"]);
+            Console.WriteLine(strStore["FOUR"]);
 
             Console.ReadKey();
         }
